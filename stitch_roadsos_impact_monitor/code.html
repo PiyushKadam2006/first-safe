@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "surface-container-highest": "#2d3449",
+                  "outline-variant": "#5b403e",
+                  "outline": "#ab8986",
+                  "surface": "#0b1326",
+                  "on-primary-fixed": "#410004",
+                  "secondary-fixed": "#6ffbbe",
+                  "on-secondary-fixed": "#002113",
+                  "on-secondary-container": "#00311f",
+                  "error": "#ffb4ab",
+                  "secondary-container": "#00a572",
+                  "on-background": "#dae2fd",
+                  "primary-fixed-dim": "#ffb3ad",
+                  "inverse-surface": "#dae2fd",
+                  "on-surface": "#dae2fd",
+                  "on-primary-container": "#5c0008",
+                  "error-container": "#93000a",
+                  "secondary": "#4edea3",
+                  "tertiary-container": "#24a09d",
+                  "on-secondary-fixed-variant": "#005236",
+                  "surface-tint": "#ffb3ad",
+                  "surface-bright": "#31394d",
+                  "on-error-container": "#ffdad6",
+                  "surface-dim": "#0b1326",
+                  "primary-fixed": "#ffdad7",
+                  "on-primary-fixed-variant": "#930013",
+                  "on-secondary": "#003824",
+                  "primary": "#ffb3ad",
+                  "surface-container-high": "#222a3d",
+                  "on-tertiary": "#003736",
+                  "surface-variant": "#2d3449",
+                  "surface-container-low": "#131b2e",
+                  "on-tertiary-fixed": "#00201f",
+                  "on-primary": "#68000a",
+                  "on-tertiary-container": "#00302e",
+                  "on-error": "#690005",
+                  "tertiary-fixed": "#87f4f0",
+                  "surface-container-lowest": "#060e20",
+                  "secondary-fixed-dim": "#4edea3",
+                  "on-surface-variant": "#e4beba",
+                  "inverse-on-surface": "#283044",
+                  "inverse-primary": "#b91a24",
+                  "surface-container": "#171f33",
+                  "on-tertiary-fixed-variant": "#00504e",
+                  "tertiary": "#69d8d4",
+                  "background": "#0b1326",
+                  "primary-container": "#ff5451",
+                  "tertiary-fixed-dim": "#69d8d4"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {},
+          "fontFamily": {
+                  "headline": ["Public Sans"],
+                  "body": ["Inter"],
+                  "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .emergency-pulse {
+      background: radial-gradient(circle, #ff5451 0%, #0b1326 100%);
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+    .countdown-ring {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 200; /* Simulated progress */
+    }
+    .glass-telemetry {
+      background: rgba(45, 52, 73, 0.6);
+      backdrop-filter: blur(40px);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-white min-h-screen overflow-hidden">
+<!-- Main Alert Canvas -->
+<main class="relative h-screen w-full flex flex-col items-center justify-between p-6">
+<!-- Background Urgency Layer -->
+<div class="absolute inset-0 z-0 bg-primary-container/20 emergency-pulse"></div>
+<!-- Top Status Bar (Contextual Suppression of TopAppBar as per rule) -->
+<header class="relative z-10 w-full flex justify-between items-center py-4">
+<div class="flex flex-col">
+<span class="font-headline font-black text-white tracking-tighter text-2xl uppercase">RoadSoS</span>
+<span class="font-label text-[10px] font-bold tracking-[0.2em] text-primary uppercase">Critical Event Detected</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-highest px-4 py-2 rounded-full">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<span class="font-label text-xs font-bold tracking-widest text-white uppercase">Dispatch Pending</span>
+</div>
+</header>
+<!-- Centerpiece: Giant Countdown -->
+<section class="relative z-10 flex flex-col items-center justify-center flex-grow">
+<div class="relative flex items-center justify-center w-[320px] h-[320px]">
+<!-- Circular Progress Ring -->
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle cx="160" cy="160" fill="transparent" r="145" stroke="rgba(255, 255, 255, 0.1)" stroke-width="12"></circle>
+<circle class="text-primary-container countdown-ring" cx="160" cy="160" fill="transparent" r="145" stroke="currentColor" stroke-width="12"></circle>
+</svg>
+<!-- Large Digit -->
+<div class="flex flex-col items-center">
+<h1 class="font-headline text-[140px] font-black text-white leading-none tracking-tighter">5</h1>
+<p class="font-label text-xs font-bold tracking-[0.3em] text-primary-fixed-dim uppercase mt-[-10px]">Seconds Remaining</p>
+</div>
+</div>
+<div class="mt-8 text-center max-w-xs">
+<h2 class="font-headline text-2xl font-bold text-white tracking-tight leading-tight uppercase">CRASH DETECTED</h2>
+<p class="font-body text-on-surface-variant text-sm mt-2 font-medium">Automatic Emergency Services dispatch in progress. Stay where you are.</p>
+</div>
+</section>
+<!-- Telemetry: Bento Glassmorphism Grid -->
+<section class="relative z-10 w-full grid grid-cols-3 gap-3 mb-6">
+<!-- Accelerometer Card -->
+<div class="glass-telemetry p-4 rounded-xl flex flex-col justify-between aspect-square border border-white/5">
+<div class="flex justify-between items-start">
+<span class="font-label text-[10px] font-bold tracking-widest text-primary uppercase">Impact</span>
+<span class="material-symbols-outlined text-primary text-lg">sensors</span>
+</div>
+<div>
+<span class="font-headline text-3xl font-black text-white">3.2</span>
+<span class="font-label text-xs font-bold text-primary-fixed-dim ml-1 uppercase">G-Force</span>
+</div>
+</div>
+<!-- GPS Card -->
+<div class="glass-telemetry p-4 rounded-xl flex flex-col justify-between aspect-square border border-white/5 col-span-1">
+<div class="flex justify-between items-start">
+<span class="font-label text-[10px] font-bold tracking-widest text-on-tertiary-fixed-variant uppercase">Location</span>
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="font-label text-[10px] font-bold text-white tracking-tight">40.7128° N</span>
+<span class="font-label text-[10px] font-bold text-white tracking-tight">74.0060° W</span>
+</div>
+</div>
+<!-- Speed Card -->
+<div class="glass-telemetry p-4 rounded-xl flex flex-col justify-between aspect-square border border-white/5">
+<div class="flex justify-between items-start">
+<span class="font-label text-[10px] font-bold tracking-widest text-secondary uppercase">Velocity</span>
+<span class="material-symbols-outlined text-secondary text-lg">speed</span>
+</div>
+<div>
+<span class="font-headline text-3xl font-black text-white">0</span>
+<span class="font-label text-xs font-bold text-on-secondary-fixed-variant ml-1 uppercase">km/h</span>
+</div>
+</div>
+</section>
+<!-- Massive Safety Action -->
+<footer class="relative z-10 w-full pb-8">
+<button class="w-full bg-secondary-container text-on-secondary-container h-24 rounded-full flex items-center justify-center gap-4 active:scale-[0.98] transition-transform shadow-[0_0_40px_rgba(0,165,114,0.3)] group">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-headline text-3xl font-black tracking-tight uppercase">I AM SAFE</span>
+</button>
+<div class="text-center mt-6">
+<button class="font-label text-[10px] font-black tracking-[0.3em] text-on-surface-variant hover:text-white uppercase">Dismiss alert manually</button>
+</div>
+</footer>
+<!-- Tactical Overlay Image (Faint background telemetry texture) -->
+<div class="absolute inset-0 z-[-1] opacity-10 pointer-events-none">
+<img alt="abstract vehicle telemetry lines and geometric data patterns on dark blue background" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSWbE0P91qnAJ26om0NSevVN1k9IerFCN3vDKl3jV0iuyEeDkoYVO-Wolp6XAz1sDrmAJF_6Ot99YKyMNW_S4PSxMweApAkC9xHQVfXWN2IC49guFH8o-bkhnKDc9IDcXMs5Rd9P9KrXmqeE3mFzDO5V8gQuXCwnwyn_rDQCuYXTFWTerkz5zeJXvw7zW6rJqy39UQA52ISWx2PvjxbGcHAOF7k3_j6YnrWuVBtCFhFGdBq_b252o1vvRsoikvbYtw--gm3zlVZ2WO"/>
+</div>
+</main>
+<!-- BottomNavBar Suppressed based on "The Destination Rule" - this is a transactional focus screen -->
+</body></html>
