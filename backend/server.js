@@ -89,6 +89,16 @@ app.patch('/api/incidents/:id', async (req, res) => {
   }
 });
 
+// Delete an incident
+app.delete('/api/incidents/:id', async (req, res) => {
+  try {
+    await Incident.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Incident removed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting incident' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 RoadSoS Backend running on http://localhost:${PORT}`);
 });

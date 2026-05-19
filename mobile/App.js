@@ -52,6 +52,7 @@ export default function App() {
   const [location, setLocation] = useState(null);
   const [status, setStatus] = useState('NOMINAL'); // NOMINAL, ALERT, DISPATCHED
   const [gForce, setGForce] = useState(1.0);
+  const [lastCancelTime, setLastCancelTime] = useState(0);
 
   const countdownInterval = useRef(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -60,8 +61,8 @@ export default function App() {
 
   // Update refs so accelerometer callback always has latest state
   useEffect(() => {
-    stateRef.current = { isAlertActive, status };
-  }, [isAlertActive, status]);
+    stateRef.current = { isAlertActive, status, lastCancelTime };
+  }, [isAlertActive, status, lastCancelTime]);
 
   // Request Permissions
   useEffect(() => {
@@ -114,9 +115,10 @@ export default function App() {
         setGForce(latestGForce);
         gForceRef.current = latestGForce;
 
-        const { isAlertActive: currentAlert, status: currentStatus } = stateRef.current;
+        const { isAlertActive: currentAlert, status: currentStatus, lastCancelTime: lastCancel } = stateRef.current;
+        const now = Date.now();
 
-        if (totalG > CRASH_THRESHOLD && !currentAlert && currentStatus !== 'DISPATCHED') {
+        if (totalG > CRASH_THRESHOLD && !currentAlert && currentStatus !== 'DISPATCHED' && (now - lastCancel > 5000)) {
           triggerAlert();
         }
       })
@@ -150,6 +152,8 @@ export default function App() {
 
   const handleSOS = async () => {
     try {
+      console.log('STARTING SOS DISPATCH');
+      setStatus('SENDING'); // New state for feedback
       Vibration.cancel();
       Vibration.vibrate(1000);
       
@@ -166,10 +170,12 @@ export default function App() {
       };
 
       await axios.post(BACKEND_URL, payload);
+      console.log('SOS DISPATCH SUCCESSFUL');
       setStatus('DISPATCHED');
       setIsAlertActive(false);
     } catch (error) {
-      console.error('SOS Failed:', error);
+      console.error('SOS Failed:', error.message);
+      alert('SOS Dispatch Failed. Please check your connection.');
       setStatus('NOMINAL');
       setIsAlertActive(false);
       clearInterval(countdownInterval.current);
@@ -177,10 +183,12 @@ export default function App() {
   };
 
   const cancelSOS = () => {
+    console.log('SAFE BUTTON PRESSED: Cancelling SOS');
     clearInterval(countdownInterval.current);
     Vibration.cancel();
     setIsAlertActive(false);
     setStatus('NOMINAL');
+    setLastCancelTime(Date.now());
   };
 
 
@@ -208,6 +216,11 @@ export default function App() {
             <View style={styles.countdownContainer}>
                <Text style={styles.countdownNumber}>{countdown}</Text>
                <Text style={styles.countdownLabel}>Seconds Remaining</Text>
+            </View>
+          ) : status === 'SENDING' ? (
+            <View style={styles.countdownContainer}>
+               <MaterialIcons name="cloud-upload" size={80} color="#69d8d4" />
+               <Text style={styles.countdownLabel}>SENDING SOS...</Text>
             </View>
           ) : (
             <MaterialIcons name="check-circle" size={120} color="#00a572" />
@@ -271,6 +284,10 @@ export default function App() {
          <Text style={styles.monitorLabel}>REAL-TIME G-FORCE</Text>
          <Text style={styles.monitorValue}>{gForce}<Text style={styles.monitorUnit}> G</Text></Text>
       </View>
+
+      <TouchableOpacity style={styles.testButton} onPress={triggerAlert}>
+         <Text style={styles.testButtonText}>SIMULATE CRASH (TEST)</Text>
+      </TouchableOpacity>
 
 
 

@@ -25,24 +25,26 @@ const emergencyIcon = new L.Icon({
     shadowSize: [41, 41]
 });
 
-const ChangeView = ({ center }) => {
+const ChangeView = ({ center, zoom }) => {
     const map = useMap();
-    map.setView(center, map.getZoom());
+    map.setView(center, zoom);
     return null;
 };
 
 const Map = ({ incidents }) => {
     const defaultCenter = [20.5937, 78.9629]; // Center of India
-    const center = incidents.length > 0 ? [incidents[0].location.latitude ?? incidents[0].location.lat, incidents[0].location.longitude ?? incidents[0].location.lng] : defaultCenter;
+    const hasIncidents = incidents.length > 0;
+    const center = hasIncidents ? [incidents[0].location.latitude ?? incidents[0].location.lat, incidents[0].location.longitude ?? incidents[0].location.lng] : defaultCenter;
+    const zoom = hasIncidents ? 14 : 5;
 
     return (
         <div style={{ height: '100%', width: '100%', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-            <MapContainer center={center} zoom={5} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+            <MapContainer center={center} zoom={zoom} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
                 <TileLayer
                     url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 />
-                <ChangeView center={center} />
+                <ChangeView center={center} zoom={zoom} />
                 {incidents.map((incident) => (
                     <Marker 
                         key={incident._id} 
